@@ -24,7 +24,9 @@
           <td>{{item.scale}}</td>
           <td>{{Math.floor((item.duration/1000))}}</td>
           <td><audio :src="item.src" controls="controls"></audio></td>
-          <td>{{item.is_pass}}</td>
+          <td>{{item.is_pass}}
+            <a href="javascript:;" @click="pass(item)">{{item.is_pass==1?'已通过':'未通过'}}</a>
+          </td>
           <td>{{item.create_time}}</td>
         </tr>
       </tbody>
@@ -75,7 +77,6 @@ export default {
           this.data = []
           this.total = 0
         }
-        console.log(this.data)
         this.isLoading = false
       }, () => {
         this.$notify.error({
@@ -90,6 +91,27 @@ export default {
     onChangePage (page) {
       this.page = page
       this.fetch()
+    },
+    pass (item) {
+      var isPass = item.is_pass - 0
+      this.$http.post(`weapp/audio/pass`, {
+        id: item.id,
+        is_pass: isPass ? 0 : 1
+      }).then(({ data }) => {
+        if (data.code === 0) {
+          item.is_pass = isPass ? 0 : 1
+        } else {
+          this.$notify.error({
+            title: '错误',
+            message: data.msg || '请求错误'
+          })
+        }
+      }, () => {
+        this.$notify.error({
+          title: '错误',
+          message: '请求错误'
+        })
+      })
     }
   },
   created () {

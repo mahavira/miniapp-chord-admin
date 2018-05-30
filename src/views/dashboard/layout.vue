@@ -1,23 +1,23 @@
 <template>
   <el-container>
-    <el-aside width="200px">
-      <el-menu
-        :default-active="$route.path"
-        :router="true"
-        background-color="#2e3641"
-        text-color="#fff">
-        <el-menu-item v-for="route in menu" :key="route.path" :index="route.path" >
-          <i class="el-icon-menu"></i>
-          <span slot="title">{{route.name}}</span>
-        </el-menu-item>
-      </el-menu>
-    </el-aside>
+    <el-header>
+      <h3>和弦库</h3>
+    </el-header>
+
     <el-container id="container">
-      <el-header>Header</el-header>
+      <el-aside width="300px">
+        <el-menu
+          :default-active="$route.path"
+          :router="true">
+          <el-menu-item v-for="route in menu" :key="route.path" :index="route.path" >
+            <i class="el-icon-menu"></i>
+            <span slot="title">{{route.name}}</span>
+          </el-menu-item>
+        </el-menu>
+      </el-aside>
       <el-main>
         <router-view/>
       </el-main>
-      <el-footer>Footer</el-footer>
     </el-container>
   </el-container>
 </template>
@@ -41,26 +41,14 @@ export default {
 .el-container {
   height: 100vh;
 }
-.el-header,
-.el-footer {
-  background-color: #fafafa;
-  color: #333;
-  border: #eee solid 0px;
-}
 .el-header{
-  border-bottom-width: 1px
+  border-bottom: 1px solid #eee
 }
-.el-footer{
-  border-top-width: 1px
-}
-.el-aside {
-  background-color: #2e3641;
-  color: #FFF;
-}
+
+
 
 .el-main {
   background-color: #fff;
   color: #333;
-
 }
 </style>
