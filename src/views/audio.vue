@@ -9,6 +9,9 @@
           <th>scale</th>
           <th>duration</th>
           <th>audio</th>
+          <th>r_player</th>
+          <th>s_song</th>
+          <th>audio</th>
           <th>is_pass</th>
           <th>create_time</th>
         </tr>
@@ -24,6 +27,8 @@
           <td>{{item.scale}}</td>
           <td>{{Math.floor((item.duration/1000))}}</td>
           <td><audio :src="item.src" controls="controls"></audio></td>
+          <td>{{item.r_player}}</td>
+          <td>{{item.r_song}}</td>
           <td>{{item.is_pass}}
             <a href="javascript:;" @click="pass(item)">{{item.is_pass==1?'已通过':'未通过'}}</a>
           </td>

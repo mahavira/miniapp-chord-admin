@@ -18,7 +18,7 @@
       <tbody>
         <tr v-for="item in data" :key="item.openId">
           <td><img :src="item.avatarUrl" style="width:50px;"></td>
-          <td>{{item.nickName}}</td>
+          <td>{{item.nickName}}<br/>{{item.openId}}</td>
           <td>{{item.gender}}</td>
           <td>{{item.country}}</td>
           <td>{{item.province}}</td>
