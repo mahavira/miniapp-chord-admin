@@ -15,8 +15,8 @@
           <th>is_pass</th>
           <th>create_time</th>
         </tr>
-        <tr v-if="!isLoading&&!data.length">
-          <td colspan="6" class="no-data">无数据</td>
+        <tr v-if="isLoading&&!data.length">
+          <td colspan="11" class="no-data">无数据</td>
         </tr>
       </thead>
       <tbody>
@@ -26,7 +26,9 @@
           <td>{{item.chord}}</td>
           <td>{{item.scale}}</td>
           <td>{{Math.floor((item.duration/1000))}}</td>
-          <td><audio :src="item.src" controls="controls"></audio></td>
+          <td>
+            <audio :src="item.src" controls="controls"></audio>
+          </td>
           <td>{{item.r_player}}</td>
           <td>{{item.r_song}}</td>
           <td>{{item.is_pass}}
@@ -36,16 +38,6 @@
         </tr>
       </tbody>
     </table>
-
-    <el-pagination
-      style="float:right"
-      @current-change="onChangePage"
-      :current-page.sync="page"
-      :page-size="size"
-      layout="total, prev, pager, next"
-      :total="total">
-    </el-pagination>
-
   </div>
 </template>
 
@@ -53,27 +45,35 @@
 export default {
   data () {
     return {
-      data: [],
+      data: {},
       isLoading: false,
-      page: 1,
+      maxId: 0,
+      isHasData: true,
       size: 10,
       total: 0
     }
   },
   methods: {
     fetch () {
+      if (this.isLoading) return
       this.isLoading = true
       this.$http.get(`weapp/audio/all`, {
         params: {
-          page: this.page,
+          max_id: this.maxId,
           limit: this.size
         }
       }).then(({ data }) => {
         if (data.code === 0) {
-          this.data = data.data.map(n => {
-            return Object.assign(JSON.parse(n.user_info), n)
+          data.data.forEach(n => {
+            n.id -= 0
+            this.data[n.id] = Object.assign(JSON.parse(n.user_info), n)
           })
+          var ks = Object.keys(this.data)
+          this.maxId = Math.min.apply(null, ks)
           this.total = data.data.totalElements
+          if (data.data.length < this.size) {
+            this.isHasData = false
+          }
         } else {
           this.$notify.error({
             title: '错误',
@@ -121,6 +121,18 @@ export default {
   },
   created () {
     this.fetch()
+  },
+  mounted () {
+    const el = document.querySelector('.el-main')
+    el.addEventListener('scroll', () => {
+      var height = el.clientHeight
+      var scrollHeight = el.scrollHeight
+      var top = el.scrollTop
+      if (top + height >= scrollHeight) {
+        if (this.isHasData) this.fetch()
+        console.log(10)
+      }
+    })
   }
 }
 </script>

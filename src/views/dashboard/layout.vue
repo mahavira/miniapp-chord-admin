@@ -45,8 +45,6 @@ export default {
   border-bottom: 1px solid #eee
 }
 
-
-
 .el-main {
   background-color: #fff;
   color: #333;
